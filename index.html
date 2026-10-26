@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Свайп или скам — бесплатный курс | BullShit Detector</title>
+<meta name="description" content="Как не попасться на скам в дейтинге: проверяем людей, фото и источники с помощью OSINT">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,700;0,800;1,700;1,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a; --bg-raised:#141414;
+    --white:#fff; --peach:#ffdfea; --red:#fe4d42; --burgundy:#660034;
+    --blue:#8a9bf2; --blue-deep:#2b61f9; --magenta:#eb07ed; --yellow:#fcd72f;
+
+    --grad-hot:linear-gradient(90deg,var(--magenta),var(--blue-deep));
+    --grad-soft:linear-gradient(90deg,var(--peach) 0%,var(--blue) 60%);
+    --grad-warm:linear-gradient(90deg,var(--peach) 20%,var(--red) 75%);
+    --grad-cool:linear-gradient(90deg,var(--blue) 10%,var(--blue-deep) 60%);
+
+    --font-display:'Inter',system-ui,sans-serif;
+    --font-body:'Inter',system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+    --radius-pill:1000px; --radius-card:24px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg); color:var(--white);
+    font-family:var(--font-body); -webkit-font-smoothing:antialiased;
+    padding:0 18px calc(40px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--magenta);color:#fff}
+  main{max-width:480px;margin:0 auto}
+
+  /* ---------- hero ---------- */
+  .hero{padding:36px 0 28px; position:relative; overflow:clip}
+  .glow{position:absolute;top:-40px;right:-80px;width:280px;height:280px;background:var(--grad-hot);filter:blur(90px);opacity:.3;pointer-events:none}
+  .hero-inner{position:relative;z-index:1}
+
+  /* две плашки всегда в одну строку: размер подгоняется под ширину экрана */
+  .logo{
+    display:flex;flex-wrap:nowrap;align-items:center;gap:.3em;margin-bottom:26px;
+    font-size:min(26px, calc((100vw - 36px) / 12.5));
+  }
+  .logo-pill{font-family:var(--font-display);font-weight:800;font-size:1em;line-height:1;padding:.45em .85em;border-radius:var(--radius-pill);display:inline-block;white-space:nowrap;flex:none}
+  .logo-pill.a{background:var(--red);color:#000;font-style:italic}
+  .logo-pill.b{background:var(--blue-deep);color:#fff}
+
+  .hero-row{display:flex;gap:16px;align-items:stretch}
+  .hero-text{flex:1;min-width:0}
+  h1{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,8.2vw,36px);line-height:1.1;letter-spacing:-.025em;margin-bottom:14px;overflow-wrap:break-word}
+  .sub{font-size:15px;line-height:1.55;color:rgba(255,255,255,.65);margin-bottom:18px}
+
+  /* ---------- pills / buttons ---------- */
+  .pill{font-weight:700;font-size:13px;padding:8px 16px;border-radius:var(--radius-pill);display:inline-flex;align-items:center;gap:6px;line-height:1}
+  .pill.solid-yellow{background:var(--yellow);color:#000}
+  .pill.solid-peach{background:var(--peach);color:#000}
+  .pill.ghost{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8)}
+
+  .btn{display:flex;justify-content:center;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:15px;padding:16px 24px;border-radius:var(--radius-pill);transition:transform .15s ease}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--red);color:#000}
+  .btn.secondary{background:#fff;color:#000}
+  .btn.outline{border:1.5px solid rgba(255,255,255,.35);color:#fff}
+
+  /* ---------- episodes ---------- */
+  .eyebrow{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--yellow);margin:8px 0 16px}
+
+  .ep-card{background:var(--bg-raised);border-radius:var(--radius-card);overflow:hidden;border:1px solid rgba(255,255,255,.06);margin-bottom:18px}
+  .ep-thumb{padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px}
+  .ep-num{font-family:var(--font-mono);font-size:11px;font-weight:600;text-transform:uppercase;background:#000;color:var(--yellow);padding:6px 11px;border-radius:var(--radius-pill)}
+  .ep-body{padding:16px 16px 18px}
+  .ep-body h2{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.25;letter-spacing:-.015em;margin-bottom:8px}
+  .ep-body p{font-size:14px;line-height:1.55;color:rgba(255,255,255,.55);margin-bottom:14px}
+  .video{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  /* ---------- links ---------- */
+  .links{display:grid;gap:12px;margin-top:32px}
+  footer{margin-top:32px;text-align:center;font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.4)}
+
+  @media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+</head>
+<body>
+<main>
+
+  <header class="hero">
+    <div class="glow"></div>
+    <div class="hero-inner">
+      <div class="logo" aria-label="BullShit Detector">
+        <span class="logo-pill a">BullShit</span>
+        <span class="logo-pill b">Detector</span>
+      </div>
+
+      <div class="hero-row">
+        <div class="hero-text">
+          <h1>Бесплатный курс «Свайп или скам» 💔</h1>
+          <p class="sub">Как не попасться на скам в дейтинге: проверяем людей, фото и источники с помощью OSINT</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="lessons" aria-label="Эпизоды курса"></section>
+
+  <nav class="links" aria-label="Ссылки">
+    <a class="btn primary" href="https://example.org" target="_blank" rel="noopener">Дополнительные материалы →</a>
+    <a class="btn outline" href="https://www.instagram.com/bullshit.detektor/" target="_blank" rel="noopener">Instagram</a>
+    <a class="btn outline" href="https://www.tiktok.com/@bullshit.detektor" target="_blank" rel="noopener">TikTok</a>
+    <a class="btn secondary" href="https://example.org/newsletter" target="_blank" rel="noopener">Подписаться на рассылку</a>
+  </nav>
+
+  <footer>© 2026 CORRECTIV · BullShit Detector</footer>
+</main>
+
+<script>
+  // ===== РЕДАКТИРУЙТЕ ТОЛЬКО ЭТОТ БЛОК =====
+  // id — часть ссылки на YouTube после v=
+  // (youtube.com/watch?v=ABCDEFGHIJK → "ABCDEFGHIJK")
+  // title — короткое название (обложка), text — полное название с YouTube
+  const LESSONS = [
+    { id:"VIDEO_ID_1", grad:"var(--grad-hot)", label:"Я умнее скамера?",
+      title:"Скамеры в сервисах для знакомств",
+      text:"Самые частые способы обмана в дейтинг-приложениях и почему мы, такие умные, на них попадаемся" },
+    { id:"VIDEO_ID_2", grad:"var(--grad-cool)", label:"Судим по обложке",
+      title:"Как узнать всё о человеке по фото",
+      text:"Что можно узнать о человеке по фото? Профессиональные инструменты для анализа изображений" },
+    { id:"VIDEO_ID_3", grad:"var(--grad-soft)", label:"ИИ или нет?",
+      title:"Здесь поработал искусственный интеллект",
+      text:"Как распознать, что фото сгенерировано или отредактировано искусственным интеллектом" },
+    { id:"VIDEO_ID_4", grad:"var(--grad-warm)", label:"Геолокация",
+      title:"Сверяем время и место",
+      text:"Монако или Мурино? Определяем, где и когда была сделана фотография" },
+    { id:"LmHjHamiDG8", grad:"var(--grad-hot)", label:"Пробив — за и против",
+      title:"Пробив по базам",
+      text:"Открытые базы, платные боты и «сливы»: какие источники ещё можно использовать и чем это грозит" },
+  ];
+  // =========================================
+
+  const root = document.getElementById("lessons");
+  LESSONS.forEach((l, i) => {
+    const el = document.createElement("article");
+    el.className = "ep-card";
+    el.innerHTML = `
+      <div class="ep-thumb" style="background:${l.grad}">
+        <span class="ep-num"></span>
+      </div>
+      <div class="ep-body">
+        <h2></h2>
+        <p></p>
+        <div class="video">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(l.id)}?rel=0&playsinline=1"
+            loading="lazy"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+        </div>
+      </div>`;
+    el.querySelector(".ep-num").textContent = "Эпизод " + (i + 1) + (l.label ? ": " + l.label : "");
+    el.querySelector("h2").textContent = l.title;
+    el.querySelector("p").textContent = l.text;
+    el.querySelector("iframe").title = l.title;
+    root.appendChild(el);
+  });
+
+  // ===== Неразрывные пробелы: предлоги, союзы, частицы «прилипают» к следующему слову =====
+  const GLUE = "а|б|в|во|да|для|до|за|и|из|или|к|ко|ли|же|бы|на|над|не|ни|но|о|об|обо|от|по|под|при|про|с|со|у|то|без|как|что|я|мы|вы|ты|он|ии|это|где";
+  const RE_GLUE = new RegExp("(^|[^А-Яа-яЁё])(" + GLUE + ")[ \\t\\n]+", "gi");
+  function glue(text) {
+    for (let pass = 0; pass < 2; pass++) text = text.replace(RE_GLUE, "$1$2 ");
+    return text
+      .replace(/[ \t\n]+—/g, " —")                 // тире не переносится на новую строку
+      .replace(/(Эпизод)[ \t\n]+(\d)/g, "$1 $2");  // «Эпизод 1» вместе
+  }
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+  });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => { n.nodeValue = glue(n.nodeValue); });
+</script>
+</body>
+</html>
